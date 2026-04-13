@@ -557,11 +557,12 @@ export async function runMatching(profileId: string): Promise<MatchingResult> {
     date_of_birth:       profile.date_of_birth,
   }, null, 2));
 
-  // ── 2. Fetch all active benefits ──────────────────────────────────────────
+  // ── 2. Fetch all active benefits (ordered by id for deterministic evaluation) ─
   const { data: benefits, error: benefitsErr } = await supabaseAdmin
     .from("benefits")
     .select("*")
-    .eq("is_active", true);
+    .eq("is_active", true)
+    .order("id");
 
   if (benefitsErr) {
     throw new Error(`Benefits query failed: ${benefitsErr.message}`);
@@ -593,16 +594,26 @@ export async function runMatching(profileId: string): Promise<MatchingResult> {
   }
 
   // ── 4. Split by threshold ─────────────────────────────────────────────────
-  const eligible = allResults
-    .filter((r) => r.eligible)
-    .sort((a, b) => b.estimated_amount - a.estimated_amount);
+  // Stable sort: amount desc, then benefit_id asc as tiebreaker (deterministic)
+  const stableSort = (a: MatchResult, b: MatchResult) => {
+    const diff = b.estimated_amount - a.estimated_amount;
+    if (diff !== 0) return diff;
+    return a.benefit_id < b.benefit_id ? -1 : a.benefit_id > b.benefit_id ? 1 : 0;
+  };
+
+  const eligible = allResults.filter((r) => r.eligible).sort(stableSort);
 
   const aboveThreshold = eligible.filter((m) => m.estimated_amount >= FILING_THRESHOLD);
   const belowThreshold = eligible.filter((m) => m.estimated_amount < FILING_THRESHOLD);
 
   const notEligible = allResults
     .filter((r) => !r.eligible)
-    .sort((a, b) => a.benefit_name.localeCompare(b.benefit_name));
+    // Deterministic: sort by name, then benefit_id as tiebreaker
+    .sort((a, b) => {
+      const cmp = a.benefit_name < b.benefit_name ? -1 : a.benefit_name > b.benefit_name ? 1 : 0;
+      if (cmp !== 0) return cmp;
+      return a.benefit_id < b.benefit_id ? -1 : a.benefit_id > b.benefit_id ? 1 : 0;
+    });
 
   // ── 4b. AOTC and Lifetime Learning Credit are mutually exclusive ──────────
   // A taxpayer cannot claim both in the same year; keep the higher-value one.

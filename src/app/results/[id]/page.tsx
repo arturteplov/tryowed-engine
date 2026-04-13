@@ -122,7 +122,6 @@ function ScanningScreen() {
           <ScanStep key={label} label={label} activeAt={i * 1500} doneAt={(i + 1) * 1500} />
         ))}
       </div>
-      <p className="text-slate-700 text-xs mt-8 select-none">v6</p>
     </div>
   );
 }

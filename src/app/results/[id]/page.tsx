@@ -69,33 +69,33 @@ function splitByType(matches: MatchItem[]) {
 
 // ─── Scanning animation ───────────────────────────────────────────────────────
 
-const SCAN_STEP_MS = 1500;
-const SCAN_TOTAL_MS = 5 * SCAN_STEP_MS + 600; // 5 steps × 1.5 s + buffer
+const SCAN_TOTAL_MS = 5 * 1500 + 600; // 5 steps × 1.5 s + small buffer before results
 
-function ScanningScreen({ states }: { states: string[] }) {
-  const stateName = states[0] || "your state";
-  const STEPS = [
-    "Searching federal tax credit databases",
-    `Checking unclaimed property in ${stateName}`,
-    "Scanning active class action settlements",
-    "Reviewing pension and savings bond databases",
-    "Analyzing your eligibility",
-  ];
+const SCAN_LABELS = [
+  "Searching federal tax credit databases",
+  "Checking unclaimed property databases",
+  "Scanning active class action settlements",
+  "Reviewing pension and savings bond databases",
+  "Analyzing your eligibility",
+];
 
+function ScanningScreen() {
+  // checkedCount goes 0 → 1 → 2 → 3 → 4 → 5.
+  // Each step i shows a green checkmark when i < checkedCount.
+  // We use 5 independent setTimeout calls so each fires at a fixed absolute time —
+  // no intervals, no updater functions, no closures that can go stale.
   const [checkedCount, setCheckedCount] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCheckedCount((prev) => {
-        if (prev >= STEPS.length) return prev;
-        return prev + 1;
-      });
-    }, SCAN_STEP_MS);
-    return () => clearInterval(interval);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    const t1 = setTimeout(() => setCheckedCount(1), 1500);
+    const t2 = setTimeout(() => setCheckedCount(2), 3000);
+    const t3 = setTimeout(() => setCheckedCount(3), 4500);
+    const t4 = setTimeout(() => setCheckedCount(4), 6000);
+    const t5 = setTimeout(() => setCheckedCount(5), 7500);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5); };
   }, []);
 
-  const progressPct = (checkedCount / STEPS.length) * 100;
+  const progressPct = (checkedCount / SCAN_LABELS.length) * 100;
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-[#0A2540] text-white" style={{ fontFamily: "var(--font-dm-sans)" }}>
@@ -109,7 +109,7 @@ function ScanningScreen({ states }: { states: string[] }) {
         </div>
       </div>
       <div className="flex flex-col gap-3 w-full max-w-sm">
-        {STEPS.map((label, i) => {
+        {SCAN_LABELS.map((label, i) => {
           const done   = i < checkedCount;
           const active = i === checkedCount;
           return (
@@ -280,7 +280,7 @@ function CpaReferralCard({ missedYears }: { missedYears: string[] }) {
   );
 }
 
-// ─── CTA card (replaces waitlist form) ───────────────────────────────────────
+// ─── Waitlist card ────────────────────────────────────────────────────────────
 
 function WaitlistCard({
   profileId, email, name, totalEstimated, numMatches,
@@ -291,13 +291,19 @@ function WaitlistCard({
   totalEstimated: number;
   numMatches: number;
 }) {
-  const [status, setStatus] = useState<"idle" | "loading" | "done" | "dismissed">("idle");
-  const [error, setError]   = useState("");
+  const [emailVal, setEmailVal] = useState(email);
+  const [nameVal, setNameVal]   = useState(name);
+  const [status, setStatus]     = useState<"idle" | "loading" | "done">("idle");
+  const [error, setError]       = useState("");
 
-  const landingUrl = typeof window !== "undefined" ? window.location.origin : "https://owed.app";
-  const shareText  = `I just found out I may be owed $${totalEstimated.toLocaleString()} in unclaimed money. Check yours free at ${landingUrl}`;
+  const landingUrl = typeof window !== "undefined" ? `${window.location.origin}` : "https://owed.app";
+  const shareText  = `I just found out I may be owed $${totalEstimated.toLocaleString()} in unclaimed money and tax credits. Check yours free at ${landingUrl}`;
 
-  const handleNotify = async () => {
+  const handleSubmit = async () => {
+    if (!emailVal.trim() || !nameVal.trim()) {
+      setError("Please enter your name and email.");
+      return;
+    }
     setError("");
     setStatus("loading");
     try {
@@ -305,9 +311,9 @@ function WaitlistCard({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          profile_id:      null,
-          email:           email || null,
-          full_name:       name  || null,
+          profile_id:      profileId || null,
+          email:           emailVal.trim(),
+          full_name:       nameVal.trim(),
           total_estimated: totalEstimated,
           num_matches:     numMatches,
         }),
@@ -328,13 +334,9 @@ function WaitlistCard({
   };
 
   const shareTwitter = () => {
-    window.open(
-      `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`,
-      "_blank", "noopener,noreferrer"
-    );
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
   };
-
-  if (status === "dismissed") return null;
 
   if (status === "done") {
     return (
@@ -342,15 +344,11 @@ function WaitlistCard({
         <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-4">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>
         </div>
-        <p className="font-semibold text-navy text-lg mb-2" style={{ fontFamily: "var(--font-fraunces)" }}>
-          You&apos;re confirmed.
+        <p className="font-semibold text-navy text-lg mb-1" style={{ fontFamily: "var(--font-fraunces)" }}>
+          You&apos;re on the list!
         </p>
-        <p className="text-slate-600 text-sm mb-6">
-          We&apos;ll reach out to{" "}
-          <span className="font-medium text-navy">{email || "you"}</span>{" "}
-          within 48 hours.
-        </p>
-        <p className="text-sm text-slate-500 mb-4">Know someone who might have unclaimed money?</p>
+        <p className="text-slate-600 text-sm mb-6">We&apos;ll reach out within 48 hours to start your claims.</p>
+        <p className="text-sm text-slate-500 mb-3">In the meantime, share with someone who might have unclaimed money:</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <button
             type="button"
@@ -376,44 +374,20 @@ function WaitlistCard({
 
   return (
     <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-6 sm:p-8">
-      <h2 className="font-semibold text-navy text-xl mb-2" style={{ fontFamily: "var(--font-fraunces)" }}>
-        We&apos;ll start working on your claims
+      <h2 className="font-semibold text-navy text-xl mb-1" style={{ fontFamily: "var(--font-fraunces)" }}>
+        Want us to claim this for you?
       </h2>
-      <p className="text-slate-600 text-sm mb-6 leading-relaxed">
-        We have your info and we&apos;ll email you at{" "}
-        <span className="font-medium text-navy">{email || "your email"}</span>{" "}
-        within 48 hours to begin the process.
+      <p className="text-slate-600 text-sm mb-5 leading-relaxed">
+        We&apos;re onboarding our first users now. Join the priority list and we&apos;ll handle your claims first.
       </p>
 
-      {error && <p className="text-sm text-red-500 mb-3">{error}</p>}
-
-      <button
-        type="button"
-        onClick={handleNotify}
-        disabled={status === "loading"}
-        className="w-full py-3.5 rounded font-semibold text-white text-sm transition-colors hover:opacity-90 disabled:opacity-60 mb-3"
-        style={{ background: "#10B981" }}
-      >
-        {status === "loading" ? "Saving…" : "Notify me when ready"}
-      </button>
-
-      <div className="text-center mb-6">
-        <button
-          type="button"
-          onClick={() => setStatus("dismissed")}
-          className="text-sm text-slate-400 hover:text-slate-600 transition-colors underline-offset-2 hover:underline"
-        >
-          Not interested
-        </button>
-      </div>
-
-      <div className="border-t border-emerald-200 pt-5">
+      <div className="mb-5">
         <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3">How it works</p>
         <ul className="flex flex-col gap-2">
           {[
             "We file all eligible claims on your behalf",
-            "No upfront cost — ever",
-            "20% service fee only after money hits your account",
+            "You pay nothing upfront",
+            "20% service fee only after money is recovered and confirmed in your account",
           ].map((item) => (
             <li key={item} className="flex items-start gap-2.5 text-sm text-slate-700">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5" className="shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12" /></svg>
@@ -422,6 +396,44 @@ function WaitlistCard({
           ))}
         </ul>
       </div>
+
+      <div className="flex flex-col gap-3 mb-4">
+        <div>
+          <label className="text-xs text-slate-500 mb-1 block">Full name</label>
+          <input
+            type="text"
+            value={nameVal}
+            onChange={(e) => setNameVal(e.target.value)}
+            placeholder="Your full name"
+            className="w-full border border-slate-200 rounded px-4 py-3 text-navy text-sm focus:outline-none focus:border-emerald-500 transition-colors bg-white"
+          />
+        </div>
+        <div>
+          <label className="text-xs text-slate-500 mb-1 block">Email address</label>
+          <input
+            type="email"
+            value={emailVal}
+            onChange={(e) => setEmailVal(e.target.value)}
+            placeholder="you@example.com"
+            className="w-full border border-slate-200 rounded px-4 py-3 text-navy text-sm focus:outline-none focus:border-emerald-500 transition-colors bg-white"
+          />
+        </div>
+      </div>
+
+      {error && <p className="text-sm text-red-500 mb-3">{error}</p>}
+
+      <button
+        type="button"
+        onClick={handleSubmit}
+        disabled={status === "loading"}
+        className="w-full py-3.5 rounded font-semibold text-white text-sm transition-colors hover:opacity-90 disabled:opacity-60"
+        style={{ background: "#10B981" }}
+      >
+        {status === "loading" ? "Joining..." : "Join priority list"}
+      </button>
+      <p className="text-xs text-slate-400 text-center mt-3 leading-relaxed">
+        No credit card required. We&apos;ll email you within 48 hours to start your claims.
+      </p>
     </div>
   );
 }
@@ -761,7 +773,7 @@ export default function ResultsPage({
     return () => clearTimeout(timer);
   }, []);
 
-  if (phase === "scanning") return <ScanningScreen states={states} />;
+  if (phase === "scanning") return <ScanningScreen />;
 
   if (totalAbove >= 100) {
     return (

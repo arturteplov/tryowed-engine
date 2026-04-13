@@ -91,15 +91,13 @@ export default function AboutPage() {
               </svg>
             </div>
             <div>
-              <p className="font-semibold text-navy text-base" style={{ fontFamily: "var(--font-fraunces)" }}>Founder</p>
-              <p className="text-sm text-slate-500 mt-1 max-w-sm mx-auto leading-relaxed">
-                Short bio placeholder — will be customized.
+              <p className="font-semibold text-navy text-lg" style={{ fontFamily: "var(--font-fraunces)" }}>Artur</p>
+              <p className="text-sm text-slate-400 mt-0.5">Founder</p>
+              <p className="text-sm text-slate-500 mt-3 max-w-sm mx-auto leading-relaxed">
+                &ldquo;I didn&apos;t file my taxes for two years. When I finally did, I got back $2,800 I had no idea existed. Figured there had to be more people in the same situation. Turns out there are millions. So I built Owed.&rdquo;
               </p>
             </div>
           </div>
-          <p className="text-sm text-slate-500 mt-10">
-We&apos;re a small team focused on doing one thing well.
-          </p>
         </div>
       </section>
 

@@ -6,9 +6,9 @@ export async function POST(req: NextRequest) {
     const { profile_id, email, full_name, total_estimated, num_matches } =
       await req.json();
 
-    if (!email || !full_name) {
+    if (!email) {
       return NextResponse.json(
-        { error: "email and full_name are required" },
+        { error: "email is required" },
         { status: 400 }
       );
     }

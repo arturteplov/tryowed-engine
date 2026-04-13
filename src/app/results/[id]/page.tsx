@@ -98,8 +98,9 @@ function ScanningScreen({ states }: { states: string[] }) {
       if (idx >= scanSteps.length) return;
       setActiveIdx(idx);
       const duration = scanSteps[idx].duration;
+      const doneIdx = idx; // snapshot value NOW — idx++ below would mutate the variable
       setTimeout(() => {
-        setDoneSet((prev) => new Set([...prev, idx]));
+        setDoneSet((prev) => new Set([...prev, doneIdx]));
         idx++;
         if (idx < scanSteps.length) tick();
       }, duration);

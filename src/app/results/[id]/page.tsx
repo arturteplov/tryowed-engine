@@ -233,39 +233,6 @@ function MatchCard({ match, compact }: { match: MatchItem; compact?: boolean }) 
   );
 }
 
-// ─── CPA Referral Card ────────────────────────────────────────────────────────
-
-function CpaReferralCard({ missedYears }: { missedYears: string[] }) {
-  if (missedYears.length === 0) return null;
-  const yearList = missedYears.join(", ");
-  return (
-    <div className="rounded-lg border-2 border-amber-400 bg-amber-50 p-5 sm:p-6 mb-8">
-      <div className="flex items-start gap-3">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d97706" strokeWidth="2" className="shrink-0 mt-0.5">
-          <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
-          <line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />
-        </svg>
-        <div>
-          <p className="font-semibold text-navy text-sm sm:text-base" style={{ fontFamily: "var(--font-fraunces)" }}>
-            You have unfiled tax returns for {yearList}.
-          </p>
-          <p className="text-sm text-slate-600 mt-1 leading-relaxed">
-            Refunds <span className="font-semibold">expire after 3 years</span>. Our partner CPA can file amended returns on your behalf.
-          </p>
-          <button
-            type="button"
-            className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded font-semibold text-white text-sm transition-colors hover:opacity-90"
-            style={{ background: "#d97706" }}
-            onClick={() => alert("Connecting you with a tax professional. We'll be in touch within 24 hours.")}
-          >
-            Connect me with a tax pro — free
-          </button>
-          <p className="text-xs text-slate-400 mt-2">Free referral to a licensed CPA. No obligation.</p>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 // ─── Waitlist card ────────────────────────────────────────────────────────────
 
@@ -516,8 +483,6 @@ function ResultsAboveThreshold({
         </p>
       </div>
 
-      {/* CPA referral if missed years */}
-      <CpaReferralCard missedYears={missedYears} />
 
       {/* Money potentially waiting for you */}
       {moneyWaiting.length > 0 && (
@@ -602,8 +567,6 @@ function ResultsBelowOnly({
         <p className="text-xs text-slate-400 mt-2">These are under our $100 filing threshold — here&apos;s where to claim them yourself.</p>
       </div>
 
-      <CpaReferralCard missedYears={missedYears} />
-
       {moneyWaiting.length > 0 && (
         <div className="mb-6">
           <h2 className="text-sm font-semibold text-navy mb-3" style={{ fontFamily: "var(--font-fraunces)" }}>Money potentially waiting for you</h2>
@@ -654,8 +617,6 @@ function ResultsZero({
           We checked {benefitsChecked} categories across {statesSearched} state{statesSearched !== 1 ? "s" : ""}. This is actually good news — you&apos;re not leaving money on the table.
         </p>
       </div>
-
-      <CpaReferralCard missedYears={missedYears} />
 
       <div className="mb-10">
         <WaitlistCard

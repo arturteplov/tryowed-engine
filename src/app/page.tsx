@@ -448,31 +448,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── Social proof ─────────────────────────────────────────────────── */}
-        <section className="py-20 sm:py-28 px-4 sm:px-6 bg-white">
-          <div className="max-w-5xl mx-auto">
-
-            {/* Live total recovered counter */}
-            <div className="mb-12 rounded border border-slate-200 bg-slate-50 px-6 py-5 flex flex-col sm:flex-row items-center justify-center gap-3 text-center">
-              <div className="flex flex-col items-center sm:items-start">
-                <p className="text-xs uppercase tracking-widest text-slate-400 mb-1">
-                  Total recovered for users
-                </p>
-                <p
-                  className="text-3xl font-semibold"
-                  style={{ color: "#10B981", fontFamily: "var(--font-fraunces)" }}
-                >
-                  ${displayedTotal.toLocaleString()}
-                </p>
-              </div>
-              <p className="text-slate-400 text-xs sm:border-l sm:border-slate-200 sm:pl-6 max-w-xs leading-relaxed">
-                This number updates as real claims are processed. It starts at $0 — we believe honesty builds trust.
-              </p>
-            </div>
-
-          </div>
-        </section>
-
         {/* ── Fee transparency ─────────────────────────────────────────────── */}
         <section className="py-20 sm:py-28 px-4 sm:px-6 bg-[#0A2540]">
           <div className="max-w-4xl mx-auto">

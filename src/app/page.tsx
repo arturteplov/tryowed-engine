@@ -520,7 +520,7 @@ export default function Home() {
               <div className="grid grid-cols-3 bg-slate-800 text-xs uppercase tracking-widest text-slate-400 px-4 py-3">
                 <span></span>
                 <span className="text-center font-semibold" style={{ color: "#10B981" }}>
-                  Us
+                  Owed
                 </span>
                 <span className="text-center">Other apps</span>
               </div>

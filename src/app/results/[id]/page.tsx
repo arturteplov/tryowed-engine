@@ -89,27 +89,26 @@ function buildScanSteps(states: string[]) {
 
 function ScanningScreen({ states }: { states: string[] }) {
   const scanSteps = buildScanSteps(states);
-  const [activeIdx, setActiveIdx] = useState(0);
-  const [doneSet, setDoneSet] = useState<Set<number>>(new Set());
+  // `completed` = number of steps that have a green checkmark.
+  // Steps 0..completed-1 are done; step `completed` is currently active (pulsing).
+  const [completed, setCompleted] = useState(0);
 
   useEffect(() => {
-    let idx = 0;
-    const tick = () => {
-      if (idx >= scanSteps.length) return;
-      setActiveIdx(idx);
-      const duration = scanSteps[idx].duration;
-      const doneIdx = idx; // snapshot value NOW — idx++ below would mutate the variable
-      setTimeout(() => {
-        setDoneSet((prev) => new Set([...prev, doneIdx]));
-        idx++;
-        if (idx < scanSteps.length) tick();
-      }, duration);
-    };
-    tick();
+    // Advance one step every 1.5 seconds using a plain interval — no closures needed.
+    const id = setInterval(() => {
+      setCompleted((prev) => {
+        if (prev >= scanSteps.length) {
+          clearInterval(id);
+          return prev;
+        }
+        return prev + 1;
+      });
+    }, 1500);
+    return () => clearInterval(id);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const progressPct = (doneSet.size / scanSteps.length) * 100;
+  const progressPct = (completed / scanSteps.length) * 100;
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-[#0A2540] text-white" style={{ fontFamily: "var(--font-dm-sans)" }}>
@@ -117,17 +116,22 @@ function ScanningScreen({ states }: { states: string[] }) {
       <div className="w-full max-w-sm mb-8">
         <div className="h-1 bg-slate-700 rounded-full overflow-hidden">
           <div
-            className="h-full rounded-full transition-all duration-500"
+            className="h-full rounded-full transition-all duration-700"
             style={{ width: `${progressPct}%`, background: "#10B981" }}
           />
         </div>
       </div>
       <div className="flex flex-col gap-3 w-full max-w-sm">
         {scanSteps.map((s, i) => {
-          const done   = doneSet.has(i);
-          const active = activeIdx === i && !done;
+          const done   = i < completed;
+          const active = i === completed;
           return (
-            <div key={i} className={`flex items-center gap-3 text-sm transition-opacity duration-300 ${done ? "opacity-100" : active ? "opacity-100" : "opacity-30"}`}>
+            <div
+              key={i}
+              className={`flex items-center gap-3 text-sm transition-opacity duration-500 ${
+                done || active ? "opacity-100" : "opacity-30"
+              }`}
+            >
               {done ? (
                 <span className="w-5 h-5 rounded-full shrink-0 flex items-center justify-center" style={{ background: "#10B981" }}>
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>

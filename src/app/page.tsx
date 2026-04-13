@@ -470,33 +470,6 @@ export default function Home() {
               </p>
             </div>
 
-            <p className="text-center text-slate-500 mb-12 text-lg">
-              Join{" "}
-              <span className="text-navy font-semibold">847 Americans</span>{" "}
-              who&apos;ve already checked what they&apos;re owed.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {TESTIMONIALS.map(({ quote, name, location, amount }) => (
-                <div
-                  key={name}
-                  className="rounded border border-slate-200 p-6 flex flex-col gap-4"
-                >
-                  <p
-                    className="text-2xl font-semibold"
-                    style={{ color: "#10B981", fontFamily: "var(--font-fraunces)" }}
-                  >
-                    {amount} recovered
-                  </p>
-                  <p className="text-slate-600 text-sm leading-relaxed italic">
-                    &ldquo;{quote}&rdquo;
-                  </p>
-                  <p className="text-sm font-medium text-navy">
-                    {name} &mdash;{" "}
-                    <span className="text-slate-400 font-normal">{location}</span>
-                  </p>
-                </div>
-              ))}
-            </div>
           </div>
         </section>
 

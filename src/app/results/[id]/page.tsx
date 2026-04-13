@@ -69,9 +69,37 @@ function splitByType(matches: MatchItem[]) {
 
 // ─── Scanning animation ───────────────────────────────────────────────────────
 
-const SCAN_TOTAL_MS = 5 * 1500 + 600; // 5 steps × 1.5 s + small buffer before results
+const SCAN_TOTAL_MS = 5 * 1500 + 600;
 
-const SCAN_LABELS = [
+// Each step is a completely self-contained component with its own state and timers.
+// Zero shared state — one step cannot interfere with another.
+function ScanStep({ label, activeAt, doneAt }: { label: string; activeAt: number; doneAt: number }) {
+  const [phase, setPhase] = useState<"pending" | "active" | "done">("pending");
+  useEffect(() => {
+    const ta = setTimeout(() => setPhase("active"), activeAt);
+    const td = setTimeout(() => setPhase("done"),   doneAt);
+    return () => { clearTimeout(ta); clearTimeout(td); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return (
+    <div className={`flex items-center gap-3 text-sm transition-opacity duration-500 ${phase === "pending" ? "opacity-30" : "opacity-100"}`}>
+      {phase === "done" ? (
+        <span className="w-5 h-5 rounded-full shrink-0 flex items-center justify-center" style={{ background: "#10B981" }}>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
+        </span>
+      ) : phase === "active" ? (
+        <span className="w-5 h-5 rounded-full border-2 border-slate-400 shrink-0 flex items-center justify-center">
+          <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: "#10B981" }} />
+        </span>
+      ) : (
+        <span className="w-5 h-5 rounded-full border-2 border-slate-700 shrink-0" />
+      )}
+      {label}
+    </div>
+  );
+}
+
+const SCAN_STEPS = [
   "Searching federal tax credit databases",
   "Checking unclaimed property databases",
   "Scanning active class action settlements",
@@ -80,61 +108,21 @@ const SCAN_LABELS = [
 ];
 
 function ScanningScreen() {
-  // checkedCount goes 0 → 1 → 2 → 3 → 4 → 5.
-  // Each step i shows a green checkmark when i < checkedCount.
-  // We use 5 independent setTimeout calls so each fires at a fixed absolute time —
-  // no intervals, no updater functions, no closures that can go stale.
-  const [checkedCount, setCheckedCount] = useState(0);
-
-  useEffect(() => {
-    const t1 = setTimeout(() => setCheckedCount(1), 1500);
-    const t2 = setTimeout(() => setCheckedCount(2), 3000);
-    const t3 = setTimeout(() => setCheckedCount(3), 4500);
-    const t4 = setTimeout(() => setCheckedCount(4), 6000);
-    const t5 = setTimeout(() => setCheckedCount(5), 7500);
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5); };
-  }, []);
-
-  const progressPct = (checkedCount / SCAN_LABELS.length) * 100;
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-[#0A2540] text-white" style={{ fontFamily: "var(--font-dm-sans)" }}>
       <p className="text-slate-400 text-xs uppercase tracking-widest mb-8">Searching for your money</p>
+      <style>{`@keyframes scanbar{from{width:0}to{width:100%}}`}</style>
       <div className="w-full max-w-sm mb-8">
         <div className="h-1 bg-slate-700 rounded-full overflow-hidden">
-          <div
-            className="h-full rounded-full transition-all duration-700"
-            style={{ width: `${progressPct}%`, background: "#10B981" }}
-          />
+          <div className="h-full rounded-full" style={{ background: "#10B981", animation: "scanbar 7.5s linear forwards" }} />
         </div>
       </div>
       <div className="flex flex-col gap-3 w-full max-w-sm">
-        {SCAN_LABELS.map((label, i) => {
-          const done   = i < checkedCount;
-          const active = i === checkedCount;
-          return (
-            <div
-              key={i}
-              className={`flex items-center gap-3 text-sm transition-opacity duration-500 ${
-                done || active ? "opacity-100" : "opacity-30"
-              }`}
-            >
-              {done ? (
-                <span className="w-5 h-5 rounded-full shrink-0 flex items-center justify-center" style={{ background: "#10B981" }}>
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
-                </span>
-              ) : active ? (
-                <span className="w-5 h-5 rounded-full border-2 border-slate-400 shrink-0 flex items-center justify-center">
-                  <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: "#10B981" }} />
-                </span>
-              ) : (
-                <span className="w-5 h-5 rounded-full border-2 border-slate-700 shrink-0" />
-              )}
-              {label}
-            </div>
-          );
-        })}
+        {SCAN_STEPS.map((label, i) => (
+          <ScanStep key={label} label={label} activeAt={i * 1500} doneAt={(i + 1) * 1500} />
+        ))}
       </div>
+      <p className="text-slate-700 text-xs mt-8 select-none">v6</p>
     </div>
   );
 }

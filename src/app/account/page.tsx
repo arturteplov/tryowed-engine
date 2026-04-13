@@ -210,7 +210,7 @@ export default function AccountPage() {
         {/* 5. Need help? */}
         <SectionCard title="Need help?">
           <p className="text-sm text-slate-600">
-            Contact us: <a href="mailto:support@owed.com" className="text-navy underline hover:text-emerald-600 transition-colors">support@owed.com</a>
+            Contact us: <a href="mailto:support@tryowed.com" className="text-navy underline hover:text-emerald-600 transition-colors">support@tryowed.com</a>
           </p>
         </SectionCard>
       </main>

@@ -92,7 +92,7 @@ export default function TermsPage() {
         {/* 7 */}
         <H2>7. Cancellation and refunds</H2>
         <ul className="list-disc pl-5 space-y-1.5 mb-4">
-          <Li>You can cancel the filing process at any time before claims are submitted by contacting <a href="mailto:support@owed.com" className="text-navy underline">support@owed.com</a>.</Li>
+          <Li>You can cancel the filing process at any time before claims are submitted by contacting <a href="mailto:support@tryowed.com" className="text-navy underline">support@tryowed.com</a>.</Li>
           <Li>Priority filing fee ($29) is refundable within 7 days if claims have not yet been filed.</Li>
           <Li>ClaimWatch subscriptions can be cancelled anytime. No refunds for partial months.</Li>
           <Li>The 20% service fee is non-refundable once charged, as it represents work already completed.</Li>
@@ -108,22 +108,22 @@ export default function TermsPage() {
         {/* 9 */}
         <H2>9. Intellectual property</H2>
         <ul className="list-disc pl-5 space-y-1.5 mb-4">
-          <Li>All content, design, and technology is owned by Owed, Inc.</Li>
+          <Li>All content, design, and technology is owned by Owed.</Li>
           <Li>You may not copy, reproduce, or redistribute our service or content.</Li>
         </ul>
 
         {/* 10 */}
         <H2>10. Dispute resolution</H2>
         <P>
-          Disputes will be resolved through binding arbitration in the State of Delaware.
+          Disputes will be resolved through binding arbitration in the United States.
           You agree to attempt informal resolution by emailing{" "}
-          <a href="mailto:support@owed.com" className="text-navy underline">support@owed.com</a>{" "}
+          <a href="mailto:support@tryowed.com" className="text-navy underline">support@tryowed.com</a>{" "}
           before initiating arbitration.
         </P>
 
         {/* 11 */}
         <H2>11. Governing law</H2>
-        <P>These terms are governed by the laws of the State of Delaware, United States.</P>
+        <P>These terms are governed by the laws of the United States.</P>
 
         {/* 12 */}
         <H2>12. Changes</H2>
@@ -133,8 +133,7 @@ export default function TermsPage() {
 
         {/* 13 */}
         <H2>13. Contact</H2>
-        <P>Email: <a href="mailto:support@owed.com" className="text-navy underline hover:text-emerald-600 transition-colors">support@owed.com</a></P>
-        <P>Owed, Inc. — Delaware, United States</P>
+        <P>Email: <a href="mailto:support@tryowed.com" className="text-navy underline hover:text-emerald-600 transition-colors">support@tryowed.com</a></P>
       </main>
 
       <footer className="border-t border-slate-100 py-8 px-4">
@@ -143,7 +142,7 @@ export default function TermsPage() {
           <Link href="/terms" className="hover:text-navy transition-colors">Terms of Service</Link>
           <Link href="/about" className="hover:text-navy transition-colors">About</Link>
           <Link href="/contact" className="hover:text-navy transition-colors">Contact</Link>
-          <span className="ml-auto">&copy; {new Date().getFullYear()} Owed, Inc.</span>
+          <span className="ml-auto">&copy; {new Date().getFullYear()} Owed. All rights reserved.</span>
         </div>
       </footer>
     </div>

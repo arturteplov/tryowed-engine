@@ -222,7 +222,7 @@ const FAQS = [
   {
     question: "Is this legit?",
     answer:
-      "Yes. We are a Delaware C-Corporation. We search real government databases — the same ones you could search yourself — and file on your behalf. We make money only when you do. We have no reason to fabricate results.",
+      "Yes. We search real government databases — the same ones you could search yourself — and file on your behalf. We make money only when you do. We have no reason to fabricate results.",
   },
   {
     question: "How much does it cost?",
@@ -623,10 +623,10 @@ export default function Home() {
               Owed
             </span>
             <p className="text-sm text-center sm:text-left">
-              Incorporated in Delaware. Your data is encrypted and never sold.
+              Your data is encrypted and never sold.
             </p>
             <p className="text-xs mt-1">
-              &copy; {new Date().getFullYear()} Owed, Inc. All rights reserved.
+              &copy; {new Date().getFullYear()} Owed. All rights reserved.
             </p>
           </div>
           <nav className="flex flex-wrap justify-center sm:justify-end gap-x-6 gap-y-2 text-sm">

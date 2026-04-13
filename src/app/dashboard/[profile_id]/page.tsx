@@ -267,7 +267,7 @@ export default function DashboardPage({ params }: { params: Promise<{ profile_id
           <div className="bg-white border border-slate-200 rounded-lg p-6 max-w-md">
             <h2 className="text-lg font-semibold text-navy mb-4" style={{ fontFamily: "var(--font-fraunces)" }}>Help</h2>
             <div className="flex flex-col gap-4 text-sm text-slate-600">
-              <p>Questions about your claims? Email us at <a href="mailto:support@owed.com" className="underline text-navy">support@owed.com</a></p>
+              <p>Questions about your claims? Email us at <a href="mailto:support@tryowed.com" className="underline text-navy">support@tryowed.com</a></p>
               <p>We respond within <strong>24 hours</strong> on business days.</p>
               <Link href="/#faq" className="underline text-navy">View FAQ →</Link>
             </div>

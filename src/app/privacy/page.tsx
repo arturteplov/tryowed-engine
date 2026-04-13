@@ -40,10 +40,10 @@ export default function PrivacyPage() {
         {/* 1. Who we are */}
         <H2>1. Who we are</H2>
         <P>
-          Owed, Inc. is a Delaware corporation. We help Americans find and claim unclaimed money including tax credits,
+          Owed is a US-based service. We help Americans find and claim unclaimed money including tax credits,
           unclaimed property, government benefits, and class action settlements.
         </P>
-        <P>Contact: <a href="mailto:privacy@owed.com" className="text-navy underline hover:text-emerald-600 transition-colors">privacy@owed.com</a></P>
+        <P>Contact: <a href="mailto:support@tryowed.com" className="text-navy underline hover:text-emerald-600 transition-colors">support@tryowed.com</a></P>
 
         {/* 2. What we collect */}
         <H2>2. What we collect</H2>
@@ -111,7 +111,7 @@ export default function PrivacyPage() {
         <ul className="list-disc pl-5 space-y-1.5 mb-4">
           <Li><strong>Access</strong> — Request a copy of all data we hold about you</Li>
           <Li><strong>Correction</strong> — Request correction of inaccurate data</Li>
-          <Li><strong>Deletion</strong> — Request complete deletion of all your data at any time by emailing <a href="mailto:privacy@owed.com" className="text-navy underline">privacy@owed.com</a> or using the &ldquo;Delete my data&rdquo; button in your account settings. We will delete everything within 72 hours.</Li>
+          <Li><strong>Deletion</strong> — Request complete deletion of all your data at any time by emailing <a href="mailto:support@tryowed.com" className="text-navy underline">support@tryowed.com</a> or using the &ldquo;Delete my data&rdquo; button in your account settings. We will delete everything within 72 hours.</Li>
           <Li><strong>Portability</strong> — Request your data in a machine-readable format</Li>
         </ul>
         <P>
@@ -143,8 +143,7 @@ export default function PrivacyPage() {
 
         {/* 10. Contact */}
         <H2>10. Contact</H2>
-        <P>Email: <a href="mailto:privacy@owed.com" className="text-navy underline hover:text-emerald-600 transition-colors">privacy@owed.com</a></P>
-        <P>Owed, Inc. — Delaware, United States</P>
+        <P>Email: <a href="mailto:support@tryowed.com" className="text-navy underline hover:text-emerald-600 transition-colors">support@tryowed.com</a></P>
 
         <div className="mt-16 pt-6 border-t border-slate-100">
           <p className="text-xs text-slate-400 leading-relaxed">
@@ -160,7 +159,7 @@ export default function PrivacyPage() {
           <Link href="/terms" className="hover:text-navy transition-colors">Terms of Service</Link>
           <Link href="/about" className="hover:text-navy transition-colors">About</Link>
           <Link href="/contact" className="hover:text-navy transition-colors">Contact</Link>
-          <span className="ml-auto">&copy; {new Date().getFullYear()} Owed, Inc.</span>
+          <span className="ml-auto">&copy; {new Date().getFullYear()} Owed. All rights reserved.</span>
         </div>
       </footer>
     </div>

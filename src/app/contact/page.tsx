@@ -116,29 +116,9 @@ export default function ContactPage() {
           <div className="md:col-span-2">
             <div className="flex flex-col gap-8">
               <div>
-                <p className="text-xs text-slate-400 uppercase tracking-widest font-semibold mb-2">General support</p>
-                <a href="mailto:support@owed.com" className="text-navy font-medium hover:text-emerald-600 transition-colors">support@owed.com</a>
-                <p className="text-sm text-slate-500 mt-1">Within 24 hours, usually much faster.</p>
-              </div>
-
-              <div>
-                <p className="text-xs text-slate-400 uppercase tracking-widest font-semibold mb-2">Urgent claim issues</p>
-                <a href="mailto:urgent@owed.com" className="text-navy font-medium hover:text-emerald-600 transition-colors">urgent@owed.com</a>
-                <p className="text-sm text-slate-500 mt-1">If you have an active claim and need immediate help.</p>
-              </div>
-
-              <div>
-                <p className="text-xs text-slate-400 uppercase tracking-widest font-semibold mb-2">Business inquiries</p>
-                <a href="mailto:hello@owed.com" className="text-navy font-medium hover:text-emerald-600 transition-colors">hello@owed.com</a>
-                <p className="text-sm text-slate-500 mt-1">Partnerships, press, or investment inquiries.</p>
-              </div>
-
-              <div>
-                <p className="text-xs text-slate-400 uppercase tracking-widest font-semibold mb-2">Mailing address</p>
-                <p className="text-sm text-slate-600 leading-relaxed">
-                  Owed, Inc.<br />
-                  Delaware, United States
-                </p>
+                <p className="text-xs text-slate-400 uppercase tracking-widest font-semibold mb-2">Email us</p>
+                <a href="mailto:support@tryowed.com" className="text-navy font-medium hover:text-emerald-600 transition-colors">support@tryowed.com</a>
+                <p className="text-sm text-slate-500 mt-1">For support, claims, partnerships, press — anything. We reply within 24 hours.</p>
               </div>
             </div>
           </div>
@@ -151,7 +131,7 @@ export default function ContactPage() {
           <Link href="/terms" className="hover:text-navy transition-colors">Terms of Service</Link>
           <Link href="/about" className="hover:text-navy transition-colors">About</Link>
           <Link href="/contact" className="hover:text-navy transition-colors">Contact</Link>
-          <span className="ml-auto">&copy; {new Date().getFullYear()} Owed, Inc.</span>
+          <span className="ml-auto">&copy; {new Date().getFullYear()} Owed. All rights reserved.</span>
         </div>
       </footer>
     </div>

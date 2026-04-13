@@ -98,7 +98,7 @@ export default function AboutPage() {
             </div>
           </div>
           <p className="text-sm text-slate-500 mt-10">
-            Owed, Inc. is incorporated in Delaware. We&apos;re a small team focused on doing one thing well.
+We&apos;re a small team focused on doing one thing well.
           </p>
         </div>
       </section>
@@ -126,7 +126,7 @@ export default function AboutPage() {
           <Link href="/terms" className="hover:text-navy transition-colors">Terms of Service</Link>
           <Link href="/about" className="hover:text-navy transition-colors">About</Link>
           <Link href="/contact" className="hover:text-navy transition-colors">Contact</Link>
-          <span className="ml-auto">&copy; {new Date().getFullYear()} Owed, Inc.</span>
+          <span className="ml-auto">&copy; {new Date().getFullYear()} Owed. All rights reserved.</span>
         </div>
       </footer>
     </div>
